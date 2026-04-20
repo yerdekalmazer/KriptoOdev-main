@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kripto Uygulaması</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 750px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      text-align: center;
+      color: #e0e0e0;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #7986cb;
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+    }
+
+    .section-title {
+      color: #90caf9;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #b0bec5;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    textarea, input[type="text"], input[type="email"], select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      transition: border-color 0.3s, background 0.3s;
+      outline: none;
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    textarea:focus, input:focus, select:focus {
+      border-color: #7986cb;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    select option { background: #1a1a2e; color: #e0e0e0; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    button {
+      flex: 1;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-sifrele {
+      background: linear-gradient(135deg, #5c6bc0, #7986cb);
+      color: white;
+    }
+    .btn-sifrele:hover { background: linear-gradient(135deg, #3949ab, #5c6bc0); transform: translateY(-1px); }
+
+    .btn-coz {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      color: white;
+    }
+    .btn-coz:hover { background: linear-gradient(135deg, #1b5e20, #2e7d32); transform: translateY(-1px); }
+
+    .btn-email {
+      background: linear-gradient(135deg, #e64a19, #ff5722);
+      color: white;
+    }
+    .btn-email:hover { background: linear-gradient(135deg, #bf360c, #e64a19); transform: translateY(-1px); }
+
+    .result-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 80px;
+      color: #a5d6a7;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      word-break: break-all;
+      white-space: pre-wrap;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 6px;
+      color: #b0bec5;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex: unset;
+      letter-spacing: 0;
+      font-weight: 600;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+    .result-wrapper { position: relative; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 32px 0;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      display: none;
+    }
+    .alert-success { background: rgba(46, 125, 50, 0.3); border: 1px solid #43a047; color: #a5d6a7; }
+    .alert-error { background: rgba(183, 28, 28, 0.3); border: 1px solid #e53935; color: #ef9a9a; }
+
+    .hint {
+      font-size: 0.75rem;
+      color: #607d8b;
+      margin-top: 4px;
+    }
+
+    #anahtarGroup { transition: opacity 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>KriptoOdev</h1>
+    <p class="subtitle">Türkçe Alfabe Sifreleme Uygulamasi</p>
+
+    <!-- Metin -->
+    <div class="form-group">
+      <p class="section-title">Sifrelenecek / Cozulecek Metin</p>
+      <textarea id="txtGiris" placeholder="Metninizi buraya yazin..."></textarea>
+    </div>
+
+    <!-- Yöntem & Anahtar -->
+    <div class="row">
+      <div class="form-group">
+        <label for="cmbYontem">Sifreleme Yontemi</label>
+        <select id="cmbYontem" onchange="anahtarHintGuncelle()">
+          <option value="">-- Yontem Secin --</option>
+          <option>Kaydırmalı şifreleme</option>
+          <option>Doğrusal şifreleme</option>
+          <option>Yer değiştirme şifreleme</option>
+          <option>Sayı anahtarlı şifreleme</option>
+          <option>Permütasyon şifreleme</option>
+          <option>Rota şifreleme</option>
+          <option>Zigzag şifreleme</option>
+          <option>Vigenère şifreleme</option>
+          <option>Hill şifreleme (2x2)</option>
+          <option>Dört Kare şifreleme</option>
+        </select>
+      </div>
+      <div class="form-group" id="anahtarGroup">
+        <label for="txtAnahtar">Anahtar</label>
+        <input type="text" id="txtAnahtar" placeholder="Anahtar girin..." />
+        <p class="hint" id="anahtarHint"></p>
+      </div>
+    </div>
+
+    <!-- Butonlar -->
+    <div class="btn-group">
+      <button class="btn-sifrele" onclick="islemYap(true)">SIFRELE</button>
+      <button class="btn-coz" onclick="islemYap(false)">COZ</button>
+    </div>
+
+    <!-- Sonuç -->
+    <div class="form-group" style="margin-top: 24px;">
+      <p class="section-title">Sonuc</p>
+      <div class="result-wrapper">
+        <div class="result-box" id="sonucBox">Sonuc burada gorunecek...</div>
+        <button class="copy-btn" onclick="kopyala()">Kopyala</button>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- E-posta Bölümü -->
+    <p class="section-title">E-posta ile Gonder</p>
+
+    <div class="form-group" style="margin-top:12px;">
+      <label for="txtAliciEmail">Alici E-posta Adresi</label>
+      <input type="email" id="txtAliciEmail" placeholder="alici@ornek.com" />
+    </div>
+
+    <button class="btn-email" onclick="emailGonder()" style="width:100%; margin-top:4px;">
+      SIFRELI METNI E-POSTA ILE GONDER
+    </button>
+
+    <div class="alert alert-success" id="emailBasari">E-posta basariyla gonderildi!</div>
+    <div class="alert alert-error" id="emailHata"></div>
+  </div>
+
+  <script>
+    const hints = {
+      'Kaydırmalı şifreleme': 'Sayisal anahtar girin (örn: 3)',
+      'Doğrusal şifreleme': 'Sayisal anahtar girin (örn: 5)',
+      'Sayı anahtarlı şifreleme': 'Sütun sayisini girin (örn: 4)',
+      'Vigenère şifreleme': 'Metin anahtar girin (örn: ANAHTAR)',
+      'Hill şifreleme (2x2)': '4 sayi girin boslukla (örn: 2 3 5 7)',
+      'Dört Kare şifreleme': 'Iki anahtar girin virgülle (örn: ANAHTAR1,ANAHTAR2)',
+      'Yer değiştirme şifreleme': 'Anahtar gerekmez',
+      'Permütasyon şifreleme': 'Anahtar gerekmez',
+      'Rota şifreleme': 'Anahtar gerekmez',
+      'Zigzag şifreleme': 'Anahtar gerekmez',
+    };
+
+    function anahtarHintGuncelle() {
+      const yontem = document.getElementById('cmbYontem').value;
+      document.getElementById('anahtarHint').textContent = hints[yontem] || '';
+    }
+
+    async function islemYap(sifrele) {
+      const metin = document.getElementById('txtGiris').value.trim();
+      const yontem = document.getElementById('cmbYontem').value;
+      const anahtar = document.getElementById('txtAnahtar').value.trim();
+      const sonucBox = document.getElementById('sonucBox');
+
+      if (!metin) { sonucBox.textContent = 'Lutfen metin girin.'; return; }
+      if (!yontem) { sonucBox.textContent = 'Lutfen bir sifreleme yontemi secin.'; return; }
+
+      sonucBox.textContent = 'Isleniyor...';
+      try {
+        const res = await fetch('/api/kripto/islem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ metin, yontem, anahtar, sifrele })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          sonucBox.textContent = data.sonuc;
+          sonucBox.style.color = '#a5d6a7';
+        } else {
+          sonucBox.textContent = 'Hata: ' + data.hata;
+          sonucBox.style.color = '#ef9a9a';
+        }
+      } catch {
+        sonucBox.textContent = 'Sunucuya baglaниlamadi.';
+        sonucBox.style.color = '#ef9a9a';
+      }
+    }
+
+    function kopyala() {
+      const text = document.getElementById('sonucBox').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Kopyalandi!';
+        setTimeout(() => btn.textContent = 'Kopyala', 1500);
+      });
+    }
+
+    async function emailGonder() {
+      const sifreliMetin = document.getElementById('sonucBox').textContent;
+      const aliciEmail = document.getElementById('txtAliciEmail').value.trim();
+      const basari = document.getElementById('emailBasari');
+      const hata = document.getElementById('emailHata');
+
+      basari.style.display = 'none';
+      hata.style.display = 'none';
+
+      if (!aliciEmail) {
+        hata.textContent = 'Lutfen alici e-posta adresini girin.';
+        hata.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/kripto/email-gonder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ aliciEmail, sifreliMetin })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          basari.style.display = 'block';
+        } else {
+          hata.textContent = data.hata;
+          hata.style.display = 'block';
+        }
+      } catch {
+        hata.textContent = 'Sunucuya baglaниlamadi.';
+        hata.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
