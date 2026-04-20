@@ -38,10 +38,16 @@ public class KriptoController : ControllerBase
     {
         try
         {
-            string host = _config["Smtp:Host"]!;
-            int port = int.Parse(_config["Smtp:Port"]!);
-            string gonderen = _config["Smtp:GonderenEmail"]!;
-            string sifre = _config["Smtp:GonderenSifre"]!;
+            if (string.IsNullOrWhiteSpace(req.AliciEmail))
+                return BadRequest(new { hata = "Alici e-posta adresi bos olamaz." });
+
+            string host = _config["Smtp:Host"] ?? "smtp.gmail.com";
+            int port = int.TryParse(_config["Smtp:Port"], out int p) ? p : 587;
+            string gonderen = _config["Smtp:GonderenEmail"] ?? "";
+            string sifre = _config["Smtp:GonderenSifre"] ?? "";
+
+            if (string.IsNullOrWhiteSpace(gonderen))
+                return BadRequest(new { hata = "Gonderen e-posta adresi appsettings.json'da tanimli degil." });
 
             var sc = new SmtpClient(host, port)
             {
@@ -54,7 +60,7 @@ public class KriptoController : ControllerBase
                 Subject = "Sifreli Mesaj",
                 Body = req.SifreliMetin
             };
-            mail.To.Add(req.AliciEmail);
+            mail.To.Add(req.AliciEmail.Trim());
             sc.Send(mail);
             return Ok(new { mesaj = "E-posta basariyla gonderildi!" });
         }
