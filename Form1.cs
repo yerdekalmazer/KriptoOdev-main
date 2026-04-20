@@ -155,83 +155,56 @@ namespace KriptoOdev
             throw new Exception("Matrisin tersi alınamıyor (determinant sıfır veya 29 ile ortak çarpanı var).");
         }
 
-        int[,] Minor3x3(int[,] m, int skipRow, int skipCol)
+        string TemizleLatin(string metin)
         {
-            int[,] result = new int[3, 3];
-            int r = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                if (i == skipRow) continue;
-                int c = 0;
-                for (int j = 0; j < 4; j++)
-                {
-                    if (j == skipCol) continue;
-                    result[r, c++] = m[i, j];
-                }
-                r++;
-            }
-            return result;
-        }
-
-        int Det3(int[,] m, int mod)
-        {
-            long d = (long)m[0, 0] * (m[1, 1] * m[2, 2] - m[1, 2] * m[2, 1])
-                   - (long)m[0, 1] * (m[1, 0] * m[2, 2] - m[1, 2] * m[2, 0])
-                   + (long)m[0, 2] * (m[1, 0] * m[2, 1] - m[1, 1] * m[2, 0]);
-            return (int)(((d % mod) + mod) % mod);
-        }
-
-        int Det4(int[,] m, int mod)
-        {
-            long d = 0;
-            for (int c = 0; c < 4; c++)
-            {
-                int sign = (c % 2 == 0) ? 1 : -1;
-                d += sign * m[0, c] * Det3(Minor3x3(m, 0, c), mod);
-            }
-            return (int)(((d % mod) + mod) % mod);
-        }
-
-        int[,] MatrisTers4x4(int[,] m, int mod)
-        {
-            int det = Det4(m, mod);
-            int detInv = ModTers(det, mod);
-            int[,] adj = new int[4, 4];
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                {
-                    int sign = ((i + j) % 2 == 0) ? 1 : -1;
-                    int cofactor = sign * Det3(Minor3x3(m, i, j), mod);
-                    adj[j, i] = ((cofactor % mod) + mod) % mod;
-                }
-            int[,] inv = new int[4, 4];
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    inv[i, j] = (detInv * adj[i, j]) % mod;
-            return inv;
-        }
-
-        string Hill4x4(string m, string anahtarStr, bool sifrele)
-        {
-            while (m.Length % 4 != 0) m += alfabe[0];
-            string[] p = anahtarStr.Trim().Split(new char[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            if (p.Length != 16) throw new Exception("Hill (4x4) için 16 sayı girin (örn: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16).");
-            int[,] anahtar = new int[4, 4];
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    anahtar[i, j] = ((int.Parse(p[i * 4 + j]) % 29) + 29) % 29;
-            if (!sifrele)
-                anahtar = MatrisTers4x4(anahtar, 29);
+            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+            metin = metin.ToUpper()
+                .Replace('Ç', 'C').Replace('Ğ', 'G').Replace('İ', 'I')
+                .Replace('Ö', 'O').Replace('Ş', 'S').Replace('Ü', 'U')
+                .Replace('J', 'I');
             string s = "";
-            for (int i = 0; i < m.Length; i += 4)
+            foreach (char c in metin) if (alfabe25.Contains(c)) s += c;
+            return s;
+        }
+
+        char[] OlusturTablo(string anahtar)
+        {
+            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+            string s = "";
+            foreach (char c in TemizleLatin(anahtar))
+                if (!s.Contains(c)) s += c;
+            foreach (char c in alfabe25)
+                if (!s.Contains(c)) s += c;
+            return s.ToCharArray();
+        }
+
+        string DortKare(string giris, string anahtarStr, bool sifrele)
+        {
+            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+            string[] ak = anahtarStr.Trim().Split(new char[] { ',', ';' }, 2, StringSplitOptions.RemoveEmptyEntries);
+            if (ak.Length < 2) throw new Exception("Dört Kare için iki anahtar girin (örn: ANAHTAR1,ANAHTAR2).");
+            char[] t1 = alfabe25.ToCharArray();           // sol üst  – standart
+            char[] t2 = OlusturTablo(ak[0].Trim());       // sağ üst  – anahtar 1
+            char[] t3 = OlusturTablo(ak[1].Trim());       // sol alt  – anahtar 2
+            char[] t4 = alfabe25.ToCharArray();           // sağ alt  – standart
+            string m = TemizleLatin(giris);
+            if (m.Length % 2 != 0) m += 'X';
+            string s = "";
+            for (int i = 0; i < m.Length; i += 2)
             {
-                int[] v = new int[4];
-                for (int j = 0; j < 4; j++) v[j] = alfabe.IndexOf(m[i + j]);
-                for (int r = 0; r < 4; r++)
+                if (!sifrele)
                 {
-                    int toplam = 0;
-                    for (int c = 0; c < 4; c++) toplam += anahtar[r, c] * v[c];
-                    s += alfabe[((toplam % 29) + 29) % 29];
+                    int i1 = Array.IndexOf(t2, m[i]);
+                    int i2 = Array.IndexOf(t3, m[i + 1]);
+                    s += t1[i1 / 5 * 5 + i2 % 5];
+                    s += t4[i2 / 5 * 5 + i1 % 5];
+                }
+                else
+                {
+                    int i1 = Array.IndexOf(t1, m[i]);
+                    int i2 = Array.IndexOf(t4, m[i + 1]);
+                    s += t2[i1 / 5 * 5 + i2 % 5];
+                    s += t3[i2 / 5 * 5 + i1 % 5];
                 }
             }
             return s;
@@ -294,9 +267,9 @@ namespace KriptoOdev
                 {
                     sonuc = Hill(m, txtAnahtar.Text, sifrele);
                 }
-                else if (secim == "Hill şifreleme (4x4)")
+                else if (secim == "Dört Kare şifreleme")
                 {
-                    sonuc = Hill4x4(m, txtAnahtar.Text, sifrele);
+                    sonuc = DortKare(txtGiris.Text, txtAnahtar.Text, sifrele);
                 }
                 else
                 {
