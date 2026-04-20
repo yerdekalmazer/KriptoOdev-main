@@ -75,7 +75,8 @@
             "Rota şifreleme",
             "Zigzag şifreleme",
             "Vigenère şifreleme",
-            "Hill şifreleme (2x2)"});
+            "Hill şifreleme (2x2)",
+            "Hill şifreleme (4x4)"});
             this.cmbYontem.Location = new System.Drawing.Point(248, 137);
             this.cmbYontem.Name = "cmbYontem";
             this.cmbYontem.Size = new System.Drawing.Size(237, 28);
