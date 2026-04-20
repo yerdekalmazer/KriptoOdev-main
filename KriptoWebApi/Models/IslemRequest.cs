@@ -24,4 +24,10 @@ public class EmailRequest
 
     [JsonPropertyName("sifreliMetin")]
     public string SifreliMetin { get; set; } = "";
+
+    [JsonPropertyName("anahtar")]
+    public string Anahtar { get; set; } = "";
+
+    [JsonPropertyName("yontem")]
+    public string Yontem { get; set; } = "";
 }

@@ -54,11 +54,17 @@ public class KriptoController : ControllerBase
                 Credentials = new NetworkCredential(gonderen, sifre),
                 EnableSsl = true
             };
+            string body = $"Şifrelenmiş Metin: {req.SifreliMetin}\n" +
+                          $"Yöntem: {req.Yontem}\n" +
+                          $"Anahtar: {(string.IsNullOrWhiteSpace(req.Anahtar) ? "(yok)" : req.Anahtar)}";
+
             var mail = new MailMessage
             {
                 From = new MailAddress(gonderen),
-                Subject = "Sifreli Mesaj",
-                Body = req.SifreliMetin
+                Subject = "Şifreli Mesaj",
+                Body = body,
+                BodyEncoding = System.Text.Encoding.UTF8,
+                SubjectEncoding = System.Text.Encoding.UTF8
             };
             mail.To.Add(req.AliciEmail.Trim());
             sc.Send(mail);

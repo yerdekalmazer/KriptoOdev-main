@@ -36,14 +36,14 @@
       letter-spacing: 2px;
     }
 
-    .subtitle {
+    .altyazi {
       text-align: center;
       color: #7986cb;
       font-size: 0.9rem;
       margin-bottom: 36px;
     }
 
-    .section-title {
+    .bolum-baslik {
       color: #90caf9;
       font-size: 0.75rem;
       font-weight: 700;
@@ -52,7 +52,7 @@
       margin-bottom: 8px;
     }
 
-    .form-group {
+    .form-grup {
       margin-bottom: 20px;
     }
 
@@ -84,13 +84,13 @@
 
     select option { background: #1a1a2e; color: #e0e0e0; }
 
-    .row {
+    .satir {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
 
-    .btn-group {
+    .buton-grup {
       display: flex;
       gap: 12px;
       margin-top: 4px;
@@ -120,13 +120,13 @@
     }
     .btn-coz:hover { background: linear-gradient(135deg, #1b5e20, #2e7d32); transform: translateY(-1px); }
 
-    .btn-email {
+    .btn-eposta {
       background: linear-gradient(135deg, #e64a19, #ff5722);
       color: white;
     }
-    .btn-email:hover { background: linear-gradient(135deg, #bf360c, #e64a19); transform: translateY(-1px); }
+    .btn-eposta:hover { background: linear-gradient(135deg, #bf360c, #e64a19); transform: translateY(-1px); }
 
-    .result-box {
+    .sonuc-kutu {
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
@@ -140,7 +140,7 @@
       position: relative;
     }
 
-    .copy-btn {
+    .kopyala-btn {
       position: absolute;
       top: 8px;
       right: 8px;
@@ -156,52 +156,48 @@
       letter-spacing: 0;
       font-weight: 600;
     }
-    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+    .kopyala-btn:hover { background: rgba(255,255,255,0.2); }
 
-    .result-wrapper { position: relative; }
+    .sonuc-sarici { position: relative; }
 
-    .divider {
+    .ayrac {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       margin: 32px 0;
     }
 
-    .alert {
+    .uyari {
       padding: 12px 16px;
       border-radius: 10px;
       font-size: 0.85rem;
       margin-top: 12px;
       display: none;
     }
-    .alert-success { background: rgba(46, 125, 50, 0.3); border: 1px solid #43a047; color: #a5d6a7; }
-    .alert-error { background: rgba(183, 28, 28, 0.3); border: 1px solid #e53935; color: #ef9a9a; }
+    .uyari-basari { background: rgba(46, 125, 50, 0.3); border: 1px solid #43a047; color: #a5d6a7; }
+    .uyari-hata { background: rgba(183, 28, 28, 0.3); border: 1px solid #e53935; color: #ef9a9a; }
 
-    .hint {
+    .ipucu {
       font-size: 0.75rem;
       color: #607d8b;
       margin-top: 4px;
     }
-
-    #anahtarGroup { transition: opacity 0.3s; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>KriptoOdev</h1>
-    <p class="subtitle">Türkçe Alfabe Sifreleme Uygulamasi</p>
+    <h1>KriptoÖdev</h1>
+    <p class="altyazi">Türkçe Alfabe Şifreleme Uygulaması</p>
 
-    <!-- Metin -->
-    <div class="form-group">
-      <p class="section-title">Sifrelenecek / Cozulecek Metin</p>
-      <textarea id="txtGiris" placeholder="Metninizi buraya yazin..."></textarea>
+    <div class="form-grup">
+      <p class="bolum-baslik">Şifrelenecek / Çözülecek Metin</p>
+      <textarea id="txtGiris" placeholder="Metninizi buraya yazın..."></textarea>
     </div>
 
-    <!-- Yöntem & Anahtar -->
-    <div class="row">
-      <div class="form-group">
-        <label for="cmbYontem">Sifreleme Yontemi</label>
-        <select id="cmbYontem" onchange="anahtarHintGuncelle()">
-          <option value="">-- Yontem Secin --</option>
+    <div class="satir">
+      <div class="form-grup">
+        <label for="cmbYontem">Şifreleme Yöntemi</label>
+        <select id="cmbYontem" onchange="anahtarIpucuGuncelle()">
+          <option value="">-- Yöntem Seçin --</option>
           <option>Kaydırmalı şifreleme</option>
           <option>Doğrusal şifreleme</option>
           <option>Yer değiştirme şifreleme</option>
@@ -214,75 +210,72 @@
           <option>Dört Kare şifreleme</option>
         </select>
       </div>
-      <div class="form-group" id="anahtarGroup">
+      <div class="form-grup">
         <label for="txtAnahtar">Anahtar</label>
         <input type="text" id="txtAnahtar" placeholder="Anahtar girin..." />
-        <p class="hint" id="anahtarHint"></p>
+        <p class="ipucu" id="anahtarIpucu"></p>
       </div>
     </div>
 
-    <!-- Butonlar -->
-    <div class="btn-group">
-      <button class="btn-sifrele" onclick="islemYap(true)">SIFRELE</button>
-      <button class="btn-coz" onclick="islemYap(false)">COZ</button>
+    <div class="buton-grup">
+      <button class="btn-sifrele" onclick="islemYap(true)">ŞİFRELE</button>
+      <button class="btn-coz" onclick="islemYap(false)">ÇÖZ</button>
     </div>
 
-    <!-- Sonuç -->
-    <div class="form-group" style="margin-top: 24px;">
-      <p class="section-title">Sonuc</p>
-      <div class="result-wrapper">
-        <div class="result-box" id="sonucBox">Sonuc burada gorunecek...</div>
-        <button class="copy-btn" onclick="kopyala()">Kopyala</button>
+    <div class="form-grup" style="margin-top: 24px;">
+      <p class="bolum-baslik">Sonuç</p>
+      <div class="sonuc-sarici">
+        <div class="sonuc-kutu" id="sonucKutu">Sonuç burada görünecek...</div>
+        <button class="kopyala-btn" onclick="kopyala()">Kopyala</button>
       </div>
     </div>
 
-    <hr class="divider" />
+    <hr class="ayrac" />
 
-    <!-- E-posta Bölümü -->
-    <p class="section-title">E-posta ile Gonder</p>
+    <p class="bolum-baslik">E-posta ile Gönder</p>
 
-    <div class="form-group" style="margin-top:12px;">
-      <label for="txtAliciEmail">Alici E-posta Adresi</label>
+    <div class="form-grup" style="margin-top:12px;">
+      <label for="txtAliciEmail">Alıcı E-posta Adresi</label>
       <input type="email" id="txtAliciEmail" placeholder="alici@ornek.com" />
     </div>
 
-    <button class="btn-email" onclick="emailGonder()" style="width:100%; margin-top:4px;">
-      SIFRELI METNI E-POSTA ILE GONDER
+    <button class="btn-eposta" onclick="epostaGonder()" style="width:100%; margin-top:4px;">
+      ŞİFRELİ METNİ E-POSTA İLE GÖNDER
     </button>
 
-    <div class="alert alert-success" id="emailBasari">E-posta basariyla gonderildi!</div>
-    <div class="alert alert-error" id="emailHata"></div>
+    <div class="uyari uyari-basari" id="epostaBasari">E-posta başarıyla gönderildi!</div>
+    <div class="uyari uyari-hata" id="epostaHata"></div>
   </div>
 
   <script>
-    const hints = {
-      'Kaydırmalı şifreleme': 'Sayisal anahtar girin (örn: 3)',
-      'Doğrusal şifreleme': 'Sayisal anahtar girin (örn: 5)',
-      'Sayı anahtarlı şifreleme': 'Sütun sayisini girin (örn: 4)',
+    const ipuclari = {
+      'Kaydırmalı şifreleme': 'Sayısal anahtar girin (örn: 3)',
+      'Doğrusal şifreleme': 'Sayısal anahtar girin (örn: 5)',
+      'Sayı anahtarlı şifreleme': 'Sütun sayısını girin (örn: 4)',
       'Vigenère şifreleme': 'Metin anahtar girin (örn: ANAHTAR)',
-      'Hill şifreleme (2x2)': '4 sayi girin boslukla (örn: 2 3 5 7)',
-      'Dört Kare şifreleme': 'Iki anahtar girin virgülle (örn: ANAHTAR1,ANAHTAR2)',
+      'Hill şifreleme (2x2)': '4 sayı girin boşlukla (örn: 2 3 5 7)',
+      'Dört Kare şifreleme': 'İki anahtar girin virgülle (örn: ANAHTAR1,ANAHTAR2)',
       'Yer değiştirme şifreleme': 'Anahtar gerekmez',
       'Permütasyon şifreleme': 'Anahtar gerekmez',
       'Rota şifreleme': 'Anahtar gerekmez',
       'Zigzag şifreleme': 'Anahtar gerekmez',
     };
 
-    function anahtarHintGuncelle() {
+    function anahtarIpucuGuncelle() {
       const yontem = document.getElementById('cmbYontem').value;
-      document.getElementById('anahtarHint').textContent = hints[yontem] || '';
+      document.getElementById('anahtarIpucu').textContent = ipuclari[yontem] || '';
     }
 
     async function islemYap(sifrele) {
       const metin = document.getElementById('txtGiris').value.trim();
       const yontem = document.getElementById('cmbYontem').value;
       const anahtar = document.getElementById('txtAnahtar').value.trim();
-      const sonucBox = document.getElementById('sonucBox');
+      const sonucKutu = document.getElementById('sonucKutu');
 
-      if (!metin) { sonucBox.textContent = 'Lutfen metin girin.'; return; }
-      if (!yontem) { sonucBox.textContent = 'Lutfen bir sifreleme yontemi secin.'; return; }
+      if (!metin) { sonucKutu.textContent = 'Lütfen metin girin.'; return; }
+      if (!yontem) { sonucKutu.textContent = 'Lütfen bir şifreleme yöntemi seçin.'; return; }
 
-      sonucBox.textContent = 'Isleniyor...';
+      sonucKutu.textContent = 'İşleniyor...';
       try {
         const res = await fetch('/api/kripto/islem', {
           method: 'POST',
@@ -291,38 +284,40 @@
         });
         const data = await res.json();
         if (res.ok) {
-          sonucBox.textContent = data.sonuc;
-          sonucBox.style.color = '#a5d6a7';
+          sonucKutu.textContent = data.sonuc;
+          sonucKutu.style.color = '#a5d6a7';
         } else {
-          sonucBox.textContent = 'Hata: ' + data.hata;
-          sonucBox.style.color = '#ef9a9a';
+          sonucKutu.textContent = 'Hata: ' + data.hata;
+          sonucKutu.style.color = '#ef9a9a';
         }
       } catch {
-        sonucBox.textContent = 'Sunucuya baglaниlamadi.';
-        sonucBox.style.color = '#ef9a9a';
+        sonucKutu.textContent = 'Sunucuya bağlanılamadı.';
+        sonucKutu.style.color = '#ef9a9a';
       }
     }
 
     function kopyala() {
-      const text = document.getElementById('sonucBox').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        btn.textContent = 'Kopyalandi!';
+      const metin = document.getElementById('sonucKutu').textContent;
+      navigator.clipboard.writeText(metin).then(() => {
+        const btn = document.querySelector('.kopyala-btn');
+        btn.textContent = 'Kopyalandı!';
         setTimeout(() => btn.textContent = 'Kopyala', 1500);
       });
     }
 
-    async function emailGonder() {
-      const sifreliMetin = document.getElementById('sonucBox').textContent;
+    async function epostaGonder() {
+      const sifreliMetin = document.getElementById('sonucKutu').textContent;
       const aliciEmail = document.getElementById('txtAliciEmail').value.trim();
-      const basari = document.getElementById('emailBasari');
-      const hata = document.getElementById('emailHata');
+      const anahtar = document.getElementById('txtAnahtar').value.trim();
+      const yontem = document.getElementById('cmbYontem').value;
+      const basari = document.getElementById('epostaBasari');
+      const hata = document.getElementById('epostaHata');
 
       basari.style.display = 'none';
       hata.style.display = 'none';
 
       if (!aliciEmail) {
-        hata.textContent = 'Lutfen alici e-posta adresini girin.';
+        hata.textContent = 'Lütfen alıcı e-posta adresini girin.';
         hata.style.display = 'block';
         return;
       }
@@ -331,7 +326,7 @@
         const res = await fetch('/api/kripto/email-gonder', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ aliciEmail, sifreliMetin })
+          body: JSON.stringify({ aliciEmail, sifreliMetin, anahtar, yontem })
         });
         const data = await res.json();
         if (res.ok) {
@@ -341,7 +336,7 @@
           hata.style.display = 'block';
         }
       } catch {
-        hata.textContent = 'Sunucuya baglaниlamadi.';
+        hata.textContent = 'Sunucuya bağlanılamadı.';
         hata.style.display = 'block';
       }
     }
