@@ -155,39 +155,29 @@ namespace KriptoOdev
             throw new Exception("Matrisin tersi alınamıyor (determinant sıfır veya 29 ile ortak çarpanı var).");
         }
 
-        string TemizleLatin(string metin)
+        // Dört Kare: 5x6 = 30 hücre (29 Türkçe harf + X dolgu)
+        char[] OlusturTabloTR(string anahtar)
         {
-            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-            metin = metin.ToUpper()
-                .Replace('Ç', 'C').Replace('Ğ', 'G').Replace('İ', 'I')
-                .Replace('Ö', 'O').Replace('Ş', 'S').Replace('Ü', 'U')
-                .Replace('J', 'I');
+            string alfabe30 = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZX";
             string s = "";
-            foreach (char c in metin) if (alfabe25.Contains(c)) s += c;
-            return s;
-        }
-
-        char[] OlusturTablo(string anahtar)
-        {
-            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-            string s = "";
-            foreach (char c in TemizleLatin(anahtar))
+            foreach (char c in Temizle(anahtar))
                 if (!s.Contains(c)) s += c;
-            foreach (char c in alfabe25)
+            foreach (char c in alfabe30)
                 if (!s.Contains(c)) s += c;
             return s.ToCharArray();
         }
 
         string DortKare(string giris, string anahtarStr, bool sifrele)
         {
-            string alfabe25 = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+            const int SUTUN = 6;
+            string alfabe30 = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZX";
             string[] ak = anahtarStr.Trim().Split(new char[] { ',', ';' }, 2, StringSplitOptions.RemoveEmptyEntries);
             if (ak.Length < 2) throw new Exception("Dört Kare için iki anahtar girin (örn: ANAHTAR1,ANAHTAR2).");
-            char[] t1 = alfabe25.ToCharArray();           // sol üst  – standart
-            char[] t2 = OlusturTablo(ak[0].Trim());       // sağ üst  – anahtar 1
-            char[] t3 = OlusturTablo(ak[1].Trim());       // sol alt  – anahtar 2
-            char[] t4 = alfabe25.ToCharArray();           // sağ alt  – standart
-            string m = TemizleLatin(giris);
+            char[] t1 = alfabe30.ToCharArray();
+            char[] t2 = OlusturTabloTR(ak[0].Trim());
+            char[] t3 = OlusturTabloTR(ak[1].Trim());
+            char[] t4 = alfabe30.ToCharArray();
+            string m = Temizle(giris);
             if (m.Length % 2 != 0) m += 'X';
             string s = "";
             for (int i = 0; i < m.Length; i += 2)
@@ -196,15 +186,15 @@ namespace KriptoOdev
                 {
                     int i1 = Array.IndexOf(t2, m[i]);
                     int i2 = Array.IndexOf(t3, m[i + 1]);
-                    s += t1[i1 / 5 * 5 + i2 % 5];
-                    s += t4[i2 / 5 * 5 + i1 % 5];
+                    s += t1[(i1 / SUTUN) * SUTUN + i2 % SUTUN];
+                    s += t4[(i2 / SUTUN) * SUTUN + i1 % SUTUN];
                 }
                 else
                 {
                     int i1 = Array.IndexOf(t1, m[i]);
                     int i2 = Array.IndexOf(t4, m[i + 1]);
-                    s += t2[i1 / 5 * 5 + i2 % 5];
-                    s += t3[i2 / 5 * 5 + i1 % 5];
+                    s += t2[(i1 / SUTUN) * SUTUN + i2 % SUTUN];
+                    s += t3[(i2 / SUTUN) * SUTUN + i1 % SUTUN];
                 }
             }
             return s;
